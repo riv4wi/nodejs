@@ -1,0 +1,242 @@
+Documentación
+nodejs.org
+npmjs.com: Repositorio de módulos de js y node que están publicados
+
+
+nodemon: modulo para no tener que recargar la consola cada vez que hay un cambio
+
+REPL
+1. habilitar consola: node
+
+2. Ayuda de los comandos disponibles para la consola: .help 
+
+3. En la consola REPL puedo: Hacer operaciones aritméticas, console.log(), Math.random * 10, crear variables y constantes
+
+do {
+  i++
+  console.log(x)
+}
+while (i < 10)
+
+4. setInterval(() => console.log('Hola'), 1000)
+
+
+---
+Ejecutar lógica de jas con node desde la consola del SP
+node -e "console.log(10 + 5)"
+node -e "console.log(os.userInfo())"
+
+---
+Aplicar concatenación a un arreglo js desde la consola node
+> const names = ['joe', 'jhon', 'maria']
+undefined
+> names
+[ 'joe', 'jhon', 'maria' ]
+> const newNames = names.map(name => `Hello ${name}`)
+undefined
+> newNames
+[ 'Hello joe', 'Hello jhon', 'Hello maria' ]
+
+Salvar todos los comandos ejecutados en la sesión de REPL
+Guardar los comandos de la sesion REPL
+.save nombrearchivo
+---
+
+Objetos globales más comunes: process, module y require
+console.log(module)
+console.log(require)
+
+module permite separar una aplicación de js en múltiples archivos y require permite importar esos archivos que están separados
+
+variable process: Da información del sistema operativo
+---
+
+Timers
+setInterval: Ejecuta un código cada cierto tiempo
+setTimeOut: Ejecuta un código despues de que pase un tiempo
+
+setTimeout(() => {
+    console.log('hello world')
+}, 5000)
+
+---
+
+Exportar e importar módulos
+
+function add(a, b) {
+    return a + b
+}
+
+function substract(a, b) {
+    return a - b
+}
+
+/*
+// Forma vieja
+module.exports = {
+    add,
+    substract
+}*/
+
+/*
+Para la forma nueva es6 tengo que en el package.json, agregar una propiedad "type": "module"
+*/
+export default {
+    add,
+    substract
+}
+
+Otro ejmplo: product.js
+module.exports = {
+    description: 'Notebook Lenovo',
+    price: '1200 USD',
+    size: '14"',
+    color: 'Black and gray',
+    Procesador: 'Intel Core I7'
+}
+
+Otro ejemplo: user.js
+const userData = {
+    name: 'Albany',
+    lastname: 'Rivas',
+    age: 15,
+    addresss: 'Villa Nueva'
+}
+
+
+module.exports = userData
+
+----
+usando o llamando un módulo:
+import math from './mathModule/index.js'
+console.log(math.add(5,2))
+
+Tambien puede importarse datos parciales por ejemplo:
+const {description, price} = require('./productModule/product')
+
+---
+Para exportar con la forma vieja:
+
+module.exports = {
+    add,
+    substract,
+    multiply,
+    divide
+}
+
+/*
+Para exportar con la forma nueva es6 además tengo que en el package.json, agregar una propiedad "type": "module"
+
+export default {
+    add,
+    substract,
+    multiply,
+    divide
+}
+
+----
+Jerarquía de busqueda de los módulos. Si no colocamos: ./xx 
+1. Node busca en la carpeta del proyecto
+2. Busca en la carpeta node_modules
+3. Busca en los módulos nativos de node
+
+---
+Modulo path: Para trabajar con rutas de archivos. Determina si está en linux, mac o windows
+path.join: permite unir directorios o rutas de directorios
+> console.log(path.join('/public', 'dist', 'styles', 'main.css'))
+/public/dist/styles/main.css
+
+> path.basename(filePath)
+'main.css'
+
+> path.dirname(filePath)
+'/public/dist/styles'
+
+> path.parse(filePath)
+{
+  root: '/',
+  dir: '/public/dist/styles',
+  base: 'main.css',
+  ext: '.css',
+  name: 'main'
+}
+
+va a tratar de resolver la ruta parecido al join
+
+---
+fs (sync): Para trabajar con archivos sincronamente
+fs (async): Para trabajar con archivos asincronamente
+
+
+---
+npm: Administrar paquetes de node
+
+Inicializar proyecto: npm init
+
+Desinstalar un paquete: npm remove nodemon
+
+npm run ejecutar
+En el composer.json voy a colocar la sección "scripts"
+Luego en la consola: npm run ejecutar
+
+Comandos comunes que todo proyecto puede tener:
+npm run start 
+ 
+En el composer.json puedo colocar dependencias (devDependencies) que solo se usan para desarrollar como por ejemplo nodemon y colors. [[2.39]]
+
+  "scripts": {
+    "start": "node esmodule.js",
+    "dev": "nodemon esmodule.js"
+  }
+
+En la consola tambien lo puedo hacer: 
+npm i nodemon -D : D es de development
+[npm install --save-dev nodemon] No verificado
+
+---
+Instalar módulos de forma globales: npm i nodemon -g
+
+---
+npx sirve para ejecutar algunas aplicaciones de consola que pueden instalarse con nodejs,
+sin instalarlos, solo para probarlos o usarlos temporalmente
+
+CLI: Common Line Interface:(programas o herramientas que funcionan desde la consola)
+
+Un ejemplo puede ser el uso de nodemon sin instalarlo:
+npx nodemon esmodule.js
+
+---
+Promesas: Convertir código asincrono(que espera un callback) en una promesa
+
+ver archivo convertir-proceso-asincrono-en-promesa
+
+async : Sirve para que podamos especificar que dentro de una función se está manejando código asíncrono
+
+await: Es cuando estamos utilizando una función asíncrona para indicar que el código va a tomar algo de tiempo
+
+....
+Try Catch:
+async function read() {
+    try {
+        /* Para disparar un error */
+        throw new Error('Esto es un error no esperado') 
+        const result = await getText('./data/first.txt')
+        const result2 = await getText('./data/second.txt')
+        console.log(result);
+        console.log(result2);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+// Bien para no hacer todo lo anterior (promesas) manualmente node tiene un módulo llamado promisify, que permite convertir un callback a una promesa sin necesidad de escribir todo el código anterior
+
+path.join: unir directorios
+path.resolve: 
+path.basename: devuelve la ruta relativa
+
+
+
+eventloop
+promesas
+sync await
